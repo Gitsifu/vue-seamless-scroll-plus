@@ -98,7 +98,9 @@ exports.default = {
       copyHtml: '',
       height: 0,
       width: 0,
-      realBoxWidth: 0 };
+      realBoxWidth: 0,
+      isTouchMove: false
+    };
   },
 
   props: {
@@ -267,6 +269,8 @@ exports.default = {
       }
     },
     touchMove: function touchMove(e) {
+      this.isTouchMove = true;
+
       if (!this.canTouchScroll || e.targetTouches.length > 1 || e.scale && e.scale !== 1) return;
       var touch = e.targetTouches[0];
       var direction = this.options.direction;
@@ -286,6 +290,7 @@ exports.default = {
     touchEnd: function touchEnd() {
       var _this2 = this;
 
+      this.isTouchMove = false;
       if (!this.canTouchScroll) return;
       var timer = void 0;
       var direction = this.options.direction;
@@ -315,7 +320,10 @@ exports.default = {
     },
     _move: function _move() {
       if (this.isHover) return;
-      this._cancle();
+
+      if (this.isTouchMove) {
+        this._cancle();
+      }
       this.reqFrame = requestAnimationFrame(function () {
         var _this3 = this;
 

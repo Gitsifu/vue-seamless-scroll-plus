@@ -7,7 +7,7 @@ const base = require('./webpack.base.js')
 const config = merge(base, {
   entry: options.paths.resolve('src/index.js'),
   output: {
-    filename: options.isProduction ? 'vue-seamless-scroll.min.js' : 'vue-seamless-scroll.js',
+    filename: options.isProduction ? 'vue-seamless-scroll-plus.min.js' : 'vue-seamless-scroll-plus.js',
     path: options.paths.output.main,
     library: 'vueSeamlessScroll',
     libraryExport: 'default',

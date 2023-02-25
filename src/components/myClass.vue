@@ -48,6 +48,7 @@
         height: 0,
         width: 0, // 外容器宽度
         realBoxWidth: 0, // 内容实际宽度
+        isTouchMove: false,
       }
     },
     props: {
@@ -212,6 +213,7 @@
         }
       },
       touchMove (e) {
+        this.isTouchMove = true
         //当屏幕有多个touch或者页面被缩放过，就不执行move操作
         if (!this.canTouchScroll || e.targetTouches.length > 1 || e.scale && e.scale !== 1) return
         const touch = e.targetTouches[0]
@@ -229,6 +231,7 @@
         }
       },
       touchEnd () {
+        this.isTouchMove = false
         if (!this.canTouchScroll) return
         let timer
         const direction = this.options.direction
@@ -259,7 +262,10 @@
       _move () {
         // 鼠标移入时拦截_move()
         if (this.isHover) return
-        this._cancle() //进入move立即先清除动画 防止频繁touchMove导致多动画同时进行
+        // 如果正在 touchMove 才清除动画，防止频繁清除动画导致滚动卡顿
+        if (this.isTouchMove){
+          this._cancle() //进入move立即先清除动画 防止频繁touchMove导致多动画同时进行
+        }
         this.reqFrame = requestAnimationFrame(
           function () {
             const h = this.realBoxHeight / 2  //实际高度
